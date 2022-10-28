@@ -1,0 +1,89 @@
+﻿<Window x:Class="Tekkies_Custom_PCs.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Tekkies_Custom_PCs"
+        mc:Ignorable="d"
+        Title="MainWindow" 
+        Height="450" 
+        Width="500"
+        Background="#FF1F1F1F">
+    <Grid Margin="20">
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <Label Grid.ColumnSpan="2" 
+               HorizontalContentAlignment="Center" 
+               FontSize="40" 
+               Background="#FFCD4949" 
+               BorderBrush="#FFA84242"
+               Foreground="#FFDADADA"
+               BorderThickness="4">KIDS ESPORTS</Label>
+
+        <Button x:Name="btnTeams" 
+                Grid.Row="1"
+                Foreground="White"
+                Background="#FF995EEE"
+                BorderBrush="#FF8353B2"
+                BorderThickness="2"
+                Click="btnTeams_Click">TEAMS</Button>
+
+        <Button x:Name="btnResults" 
+                Grid.Row="5"
+                Grid.Column="0"
+                Foreground="White"
+                Background="#FF995EEE"
+                BorderBrush="#FF8353B2"
+                BorderThickness="2"
+                Click="btnResults_Click">Results</Button>
+
+        <Button x:Name="btnEvents" 
+                Grid.Column="1" 
+                Grid.Row="1"
+                Foreground="White"
+                Background="#FF995EEE"
+                BorderBrush="#FF8353B2"
+                BorderThickness="2"
+                Click="btnEvents_Click">EVENT</Button>
+
+        <Button x:Name="btnGamesPlayed" 
+                Grid.Row="3"
+                Foreground="White"
+                Background="#FF995EEE"
+                BorderBrush="#FF8353B2"
+                BorderThickness="2"
+                Click="btnGamesPlayed_Click"
+                >GAMESPLAYED</Button>
+        
+        <Button x:Name="btnReports" 
+                Grid.Column="2"
+                Foreground="White"
+                Background="#FF995EEE"
+                BorderBrush="#FF8353B2"
+                BorderThickness="2"
+                Grid.Row="3" 
+                Click="btnReports_Click">REPORTS</Button>
+        
+        <Button x:Name="btnExit" 
+                Grid.Row="5"
+                Grid.Column="1"
+                Foreground="White"
+                Background="#FF995EEE"
+                BorderBrush="#FF8353B2"
+                BorderThickness="2"
+                Click="BtnExit_Click">Exit</Button>
+    </Grid>
+</Window>
