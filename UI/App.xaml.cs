@@ -1,20 +1,12 @@
-﻿using Data_Management;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿#region Imports
 using System.Windows;
+#endregion
 
-namespace Tekkies_Custom_PCs
+namespace Data_Management
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
-        
+        #region Var
         public App()
         {
             DBS_Builder builder = new DBS_Builder();
@@ -25,5 +17,6 @@ namespace Tekkies_Custom_PCs
                 builder.SeedDatabaseTables();
             }
         }
+        #endregion
     }
 }

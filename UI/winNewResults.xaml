@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Tekkies_Custom_PCs"
+        xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
         Title="winNewBuild" 
         Height="450" 
         Width="300"
         Background="#FF1F1F1F">
-    
+    <!--#region UI-->
     <Grid>
         <StackPanel>
             <Label Foreground="White">Event Name:</Label>
@@ -25,11 +25,16 @@
             <ComboBox x:Name="cboGameName" Margin="10,0"/>
 
             <Label Foreground="White">Results:</Label>
-            <ComboBox x:Name="cboResults" Margin="10,0"/>
+            <ComboBox x:Name="cboResult" Margin="10,0" SelectionChanged="cboResult_SelectionChanged">
+                <ComboBoxItem x:Name="Win">Win</ComboBoxItem>
+                <ComboBoxItem x:Name="Loss">Loss</ComboBoxItem>
+                <ComboBoxItem x:Name="Draw">Draw</ComboBoxItem>
+            </ComboBox>
 
             <Button x:Name="btnSave" 
                     Margin="120,25,10,10"
                     Click="btnSave_Click">SAVE</Button>
         </StackPanel>
     </Grid>
+    <!--#endregion-->
 </Window>

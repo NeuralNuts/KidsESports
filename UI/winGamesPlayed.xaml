@@ -1,76 +1,76 @@
-﻿<Window x:Class="UI.winEvents"
+﻿<Window x:Class="UI.winGamesPlayed"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Tekkies_Custom_PCs"
+        xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="winProducts" 
-        Height="600" 
+        Title="winGamesPlayed" 
+        Height="600"
         Width="800"
         Background="#FF1F1F1F">
+    
+    <!--#region UI-->
     <Grid>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2.5*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="6*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
+
         <Label FontSize="40" 
                Grid.ColumnSpan="2" 
                Background="#FFCD4949" 
                BorderBrush="#FFA84242"
-               Foreground="#FFDADADA">PRODUCTS</Label>
-        
-        <DataGrid x:Name="dgvEvents" 
+               Foreground="#FFDADADA">GAMES PLAYED</Label>
+
+        <DataGrid x:Name="dgvGamesPlayed" 
                   Grid.Row="1" 
                   Margin="10" 
                   IsReadOnly="True" 
-                  SelectionChanged="dgvEvents_SelectionChanged"/>
-        
+                  SelectionChanged="dgvGamesPlayed_SelectionChanged"/>
+
         <StackPanel Grid.Row="1"
                     Grid.Column="1"
                     Margin="10">
 
-            <Label Foreground="White">EventID</Label>
-            <TextBox x:Name="txteventID" IsReadOnly="True"/>
+            <Label Foreground="White">Games Played ID</Label>
+            <TextBox x:Name="txtGamesPlayedID" IsReadOnly="True"/>
 
-            <Label Foreground="White">Event Name</Label>
-            <TextBox x:Name="txtEventName"/>
+            <Label Foreground="White">GameName</Label>
+            <TextBox x:Name="txtGameName"/>
 
             <Label Foreground="White">Team Name:</Label>
             <ComboBox x:Name="cboTeamName"/>
 
-            <Label Foreground="White">Event Location</Label>
-            <TextBox x:Name="txtEventLocation"/>
-
-            <Label Foreground="White">Event Date</Label>
-            <TextBox x:Name="txtEventDate"/>
+            <Label Foreground="White">Game Type</Label>
+            <TextBox x:Name="txtGameType"/>
 
             <Button x:Name="btnSave" 
                     Margin="20" 
                     Click="btnSave_Click">SAVE</Button>
         </StackPanel>
-        
+
         <Button x:Name="btnNew" 
                 Grid.Row="2" 
                 HorizontalAlignment="Left" 
                 Width="150"
                 Margin="10" 
                 Click="btnNew_Click">NEW</Button>
-        
+
         <Button x:Name="btnDelete" 
                 Grid.Row="2" 
                 HorizontalAlignment="Right"
                 Width="150"
                 Margin="10" 
                 Click="btnDelete_Click">DELETE</Button>
-        
+
         <Button x:Name="btnClose" 
                 Grid.Row="2" 
                 Grid.Column="1"
@@ -79,4 +79,5 @@
                 Margin="10" 
                 Click="btnClose_Click">CLOSE</Button>
     </Grid>
+    <!--#endregion-->
 </Window>

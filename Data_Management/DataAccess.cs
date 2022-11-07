@@ -1,10 +1,10 @@
-﻿using System;
+﻿#region Imports
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dapper;
 using Data_Management.Models;
+#endregion
 
 namespace Data_Management
 {
@@ -439,32 +439,62 @@ namespace Data_Management
                 return new List<ResultView>();
             }
         }
-
       
             /// <summary>
             /// Adds a new product record to the database based upon the provided data model.
             /// </summary>
             /// <param name="build">The data model holding the details to be stored in the database</param>
-        public void AddResults(Results build)
+        public List<Results> AddResultsWin(Results results)
+        {
+            try
             {
-                try
+                using (var conn = Helper.CreateSQLConnection("Default"))
                 {
-                    //Using statement structure which uses the provided resource  to perform the provided logic and then automatically
-                    //disposes of the resource once the structure finishes or an error occurs.
-                    using (var connection = Helper.CreateSQLConnection("Default"))
-                    {
-                        //Query string to be passed to the SQL database to perform the desired database interaction.
-                        string query = "INSERT INTO Result (FKTeamID, FKTeam_Opposing, FKEventID, FKGamesPlayedID, Result) " +
-                                       "VALUES (@FKTeamID, @FKTeam_Opposing, @FKEventID, @FKGamesPlayedID, @Result)";
-                        //Method to requests the provided data model top be saved to the database.
-                        connection.Execute(query, build);
-                    }
-                }
-                catch (Exception e)
-                {
+                    conn.Open();
 
+                    string query = "BEGIN TRANSACTION Tran1 " +
+                        "BEGIN TRY " +
+                        "INSERT INTO Result (FKTeamID, FKTeam_Opposing, FKEventID, FKGamesPlayedID, Result) " + 
+                        "VALUES (@FKTeamID, @FKTeam_Opposing, @FKEventID, @FKGamesPlayedID, @Result) " + 
+                        "UPDATE Teams " + 
+                        "SET CompetitionPoints = '2'" + 
+                        "WHERE TeamID = 1 " +
+                        "COMMIT TRANSACTION Tran1 " +
+                        "END TRY " +
+                        "BEGIN CATCH " + 
+                        "ROLLBACK TRANSACTION Tran1 " +
+                        "END CATCH ";
+
+                    return conn.Query<Results>(query).ToList();
                 }
             }
+            catch(Exception e)
+            {
+                return new List<Results>();
+            }
+           
+        }
+
+        public void AddResults(Results results)
+        {
+            try
+            {
+                //Using statement structure which uses the provided resource  to perform the provided logic and then automatically
+                //disposes of the resource once the structure finishes or an error occurs.
+                using (var connection = Helper.CreateSQLConnection("Default"))
+                {
+                    //Query string to be passed to the SQL database to perform the desired database interaction.
+                    string query = "INSERT INTO Result (ResultsID, FKTeamID, FKEventID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
+                                   "VALUES (@ResultsID, @FKTeamID, @EventID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result)";
+                    //Method to requests the provided data model top be saved to the database.
+                    connection.Execute(query, results);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
 
         public void DeleteResults(int id)
         {
@@ -486,7 +516,7 @@ namespace Data_Management
             }
         }
 
-        public void UpdateResults(GamesPlayed product)
+        public void UpdateResults(Results product)
         {
             try
             {
@@ -509,7 +539,6 @@ namespace Data_Management
             }
         }
     
-        
         #endregion
     }
 }

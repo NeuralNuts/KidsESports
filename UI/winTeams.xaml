@@ -3,13 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Tekkies_Custom_PCs"
+        xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
         Title="Customers"
         Height="450" 
         Width="800"
         Background="#FF1F1F1F">
 
+    <!--Team UI-->
+    <!--#region UI -->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition 
@@ -85,4 +87,6 @@
                     Margin="224,10,214,10" 
                     Click="BtnSave_Click" Content="SAVE" Grid.Row="2"/>
     </Grid>
+    <!--#endregion-->
 </Window>
+

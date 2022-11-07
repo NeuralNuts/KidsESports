@@ -3,13 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Tekkies_Custom_PCs"
+        xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
         Title="winBuildSelection" 
         Height="450" 
         Width="800"
         Background="#FF1F1F1F">
-
+    <!--UI for results-->
+    <!--#region UI-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -50,4 +51,5 @@
                 Margin="10,15" 
                 Click="btnClose_Click">Close</Button>
     </Grid>
+    <!--#endregion-->
 </Window>

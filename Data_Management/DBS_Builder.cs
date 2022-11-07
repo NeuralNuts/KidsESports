@@ -1,56 +1,36 @@
-﻿using Dapper;
+﻿#region Imports
+using Dapper;
 using Data_Management.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+#endregion
 
 namespace Data_Management
 {
-    /// <summary>
-    /// Class which builds the application's database and seeds ti with test data programatically ratehr then needing it to be done manually with SQL Server Management Studio.
-    /// This class inherits from the DataAccess class to access some of the methods there for adding new entries and is called/triggered by the App.xaml.cs class on startup to 
-    /// build the databse if it does not already exist. 
-    /// 
-    /// PLEASE GO TO THE App.xaml.cs TO SEE HOW THIS IS USED.
-    /// </summary>
     public class DBS_Builder: DataAccess
     {
-
-        /// <summary>
-        /// Sends a request to SQL Server to check if a databse exists matching name provided in the connection string. If it does not exists the query then asks the 
-        /// server to create a new databse with the provided connection string name.
-        /// </summary>
         public void CreateDatabase()
         {
-            //Our connection object to link to the database
             SqlConnection connection = Helper.CreateSQLConnection("Default");
            
             try
             {
-                //Custom connection string to only connect to the server layer of your SQL Database
                 string connectionString = $"Data Source={connection.DataSource}; Integrated Security = True";
-                //Query to build new Database if it does not already exist.
                 string query = $"IF NOT EXISTS (SELECT 1 FROM sys.databases WHERE name ='{connection.Database}') " +
                                $" CREATE DATABASE {connection.Database}";
 
                 using (connection = new SqlConnection(connectionString))
                 {
-                    //A command object which will send our request to the Database <= Normally done for us by Dapper 
                     using (SqlCommand command = new SqlCommand(query,connection))
                     {
-                        //Checks if the connection is currently open, if not, it opens the connection.<= Normally done for us by Dapper 
                         if (connection.State == ConnectionState.Closed)
                         {
                             connection.Open();
                         }
 
-                        //Executes an SQL Request that does not expect a response(Query) to be returned.
                         command.ExecuteNonQuery();
-                        //Closes the connection to the database manually.<= Normally done for us by Dapper 
                         connection.Close();
                     }
                 }
@@ -372,14 +352,14 @@ namespace Data_Management
             //populate list of data model objects with pre-filled data
             List<Results> builds = new List<Results>
             {
-                new Results(1,1,2,1),
-                new Results(2,2,2,5),
-                new Results(3,1,3,6)
+                //new Results(1,1,2,1),
+                //new Results(2,2,2,5),
+                //new Results(3,1,3,6)
             };
             //Add each to the database using the relevant DataAccess "Add" method.
             foreach (var item in builds)
             {
-                AddResults(item);
+                AddResultsWin(item);
             }
         }
     }
