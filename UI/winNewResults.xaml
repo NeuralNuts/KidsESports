@@ -25,11 +25,7 @@
             <ComboBox x:Name="cboGameName" Margin="10,0"/>
 
             <Label Foreground="White">Results:</Label>
-            <ComboBox x:Name="cboResult" Margin="10,0" SelectionChanged="cboResult_SelectionChanged">
-                <ComboBoxItem x:Name="Win">Win</ComboBoxItem>
-                <ComboBoxItem x:Name="Loss">Loss</ComboBoxItem>
-                <ComboBoxItem x:Name="Draw">Draw</ComboBoxItem>
-            </ComboBox>
+            <TextBox x:Name="txtResults" Margin="10,0,9.6,0" Height="22"/>
 
             <Button x:Name="btnSave" 
                     Margin="120,25,10,10"

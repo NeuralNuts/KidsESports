@@ -1,6 +1,7 @@
 ﻿#region Imports
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Dapper;
 using Data_Management.Models;
@@ -188,7 +189,7 @@ namespace Data_Management
                 {
                     //Query string to be passed to the SQL database to perform the desired database interaction.
                     string query = "INSERT INTO Events (EventName, Eventlocation, EventDate, FKTeamID) " +
-                               "VALUES (@EventName, @EventLocation, @Eventdate, @FKTeamID)";
+                               "VALUES (@EventName, @EventLocation, @EventDate, @FKTeamID)";
                     //Method to requests the desired record to be removed from the database.
                     connection.Execute(query, events);
                 }
@@ -439,40 +440,43 @@ namespace Data_Management
                 return new List<ResultView>();
             }
         }
-      
-            /// <summary>
-            /// Adds a new product record to the database based upon the provided data model.
-            /// </summary>
-            /// <param name="build">The data model holding the details to be stored in the database</param>
-        public List<Results> AddResultsWin(Results results)
+
+        /// <summary>
+        /// Adds a new product record to the database based upon the provided data model.
+        /// </summary>
+        /// <param name="build">The data model holding the details to be stored in the database</param>
+        public bool ResultsTransaction(Results results)
         {
-            try
+            using (var connection = Helper.CreateSQLConnection("Default"))
             {
-                using (var conn = Helper.CreateSQLConnection("Default"))
+                //Checks if the connection is currently open, if not, it opens the connection.<= Normally done for us by Dapper 
+                if (connection.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    connection.Open();
+                }
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        string query = "INSERT INTO Result (ResultsID, FKTeamID, FKEventsID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
+                                       "VALUES (@ResultsID, @FKTeamID, @FKEventsID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result)";
 
-                    string query = "BEGIN TRANSACTION Tran1 " +
-                        "BEGIN TRY " +
-                        "INSERT INTO Result (FKTeamID, FKTeam_Opposing, FKEventID, FKGamesPlayedID, Result) " + 
-                        "VALUES (@FKTeamID, @FKTeam_Opposing, @FKEventID, @FKGamesPlayedID, @Result) " + 
-                        "UPDATE Teams " + 
-                        "SET CompetitionPoints = '2'" + 
-                        "WHERE TeamID = 1 " +
-                        "COMMIT TRANSACTION Tran1 " +
-                        "END TRY " +
-                        "BEGIN CATCH " + 
-                        "ROLLBACK TRANSACTION Tran1 " +
-                        "END CATCH ";
+                        connection.Execute(query, results, transaction);
 
-                    return conn.Query<Results>(query).ToList();
+
+
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+
+
+                        transaction.Rollback();
+                        return false;
+                    }
                 }
             }
-            catch(Exception e)
-            {
-                return new List<Results>();
-            }
-           
         }
 
         public void AddResults(Results results)
@@ -484,8 +488,8 @@ namespace Data_Management
                 using (var connection = Helper.CreateSQLConnection("Default"))
                 {
                     //Query string to be passed to the SQL database to perform the desired database interaction.
-                    string query = "INSERT INTO Result (ResultsID, FKTeamID, FKEventID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
-                                   "VALUES (@ResultsID, @FKTeamID, @EventID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result)";
+                    string query = "INSERT INTO Result (ResultsID, FKTeamID, FKEventsID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
+                                   "VALUES (@ResultsID, @FKTeamID, @FKEventsID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result)";
                     //Method to requests the provided data model top be saved to the database.
                     connection.Execute(query, results);
                 }

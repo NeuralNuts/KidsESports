@@ -2,6 +2,7 @@
 using Data_Management;
 using Data_Management.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 #endregion
@@ -12,52 +13,43 @@ namespace UI
     {
         #region Var
         List<Teams> teams_list = new List<Teams>();
+        List<Teams> opposing_teams_list = new List<Teams>();
         List<GamesPlayedView> games_list = new List<GamesPlayedView>();
         List<EventView> event_list = new List<EventView>();
         List<ResultView> result_list = new List<ResultView>();
-        Results result = new Results(0,0,0,0);
         DataAccess data = new DataAccess();
         SaveMode saveType = SaveMode.NewSave;
 
         public winNewResults()
         {
             InitializeComponent();
-            SetupComboBox();
+            
             SetupComboBox1();
             SetupComboBox2();
-            SetupComboBox3();
+            SetupTeamComboBox();
         }
         #endregion
 
         #region Functions
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            bool win = cboResult.SelectedItem.Equals(Win);
 
-            result.Result = cboResult.SelectedValue as string;
+            Results result = new Results();
+
+            result.Result = txtResults.Text;
             result.FKTeamID = (int)cboTeam.SelectedValue;
             result.FKGamesPlayedID = (int)cboGameName.SelectedValue;
-            result.FKEventID = (int)cboEventName.SelectedValue;
+            result.FKEventsID = (int)cboEventName.SelectedValue;
             result.FKTeamID_Opposing = (int)cboOpposingTeam.SelectedValue;
 
-            if (saveType == SaveMode.NewSave)
+
+            if (data.ResultsTransaction(result) == false)
             {
-                data.AddResults(result);
-            }
-            else if (saveType == SaveMode.UpdateSave)
-            {
-                data.UpdateResults(result);
+                MessageBox.Show("Oops, Something went wrong! \n Please Try again");
+                return;
             }
 
-            if (saveType == SaveMode.NewSave & win == true)
-            {
-                data.AddResultsWin(result);
-            }
-            else if (saveType == SaveMode.UpdateSave)
-            {
-               data.UpdateResults(result);
-            }
-            else
+            if (AreFieldsSelectedCorrectly() == false)
             {
                 return;
             }
@@ -66,17 +58,13 @@ namespace UI
             Close();
         }
 
-        private void SetupComboBox()
+        private void SetupTeamComboBox()
         {
             teams_list = data.GetTeams();
             cboTeam.ItemsSource = teams_list;
             cboTeam.DisplayMemberPath = "TeamName";
             cboTeam.SelectedValuePath = "TeamID";
-        }
 
-        private void SetupComboBox3()
-        {
-            teams_list = data.GetTeams();
             cboOpposingTeam.ItemsSource = teams_list;
             cboOpposingTeam.DisplayMemberPath = "TeamName";
             cboOpposingTeam.SelectedValuePath = "TeamID";
@@ -98,11 +86,31 @@ namespace UI
             cboEventName.SelectedValuePath = "EventID";
         }
 
-        private void cboResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private bool AreFieldsSelectedCorrectly()
         {
-            string var = cboResult.SelectedValue as string;
-            result.Result = var;
+            if (cboTeam.SelectedIndex == -1)
+            {
+                return false;
+            }
+            if (cboOpposingTeam.SelectedIndex == -1)
+            {
+                return false;
+            }
+            if (txtResults.Text == null)
+            {
+                return false;
+            }
+            if (cboEventName.SelectedIndex == -1)
+            {
+                return false;
+            }
+            if (cboGameName.SelectedIndex == -1)
+            {
+                return false;
+            }
+            return true;
         }
+
         #endregion
     }
 }

@@ -359,7 +359,7 @@ namespace Data_Management
             //Add each to the database using the relevant DataAccess "Add" method.
             foreach (var item in builds)
             {
-                AddResultsWin(item);
+                ResultsTransaction(item);
             }
         }
     }
