@@ -17,19 +17,18 @@ namespace UI
     {
         #region Var
         DataAccess data = new DataAccess();
-        List<string> reportOptions = new List<string> { "Teams By Names", "Events By Name", "Games Played By Game Name" };
+        List<string> reportOptions = new List<string> { "Teams By Points", "Results By Event", "Results By Game Team" };
         List<Teams> fullTeamList;
         List<Teams> filteredTeamList = new List<Teams>();
         List<Teams> TeamDisplayList;
-        List<GamesPlayedView> fullGamesPlayedList;
-        List<GamesPlayedView> filteredGamesPlayedList = new List<GamesPlayedView>();
-        List<GamesPlayedView> displayGamesPlayedList;
+        List<ResultView> fullGamesPlayedList;
+        List<ResultView> filteredGamesPlayedList = new List<ResultView>();
+        List<ResultView> displayGamesPlayedList;
 
         public winReports()
         {
             InitializeComponent();
             cboType.ItemsSource = reportOptions;
-
         }
         #endregion
 
@@ -43,27 +42,26 @@ namespace UI
             else if (cboType.SelectedIndex == 0)
             {
                 fullTeamList = data.GetTeams();
-                fullTeamList = fullTeamList.OrderBy(s => s.TeamName).ToList();
+                fullTeamList = fullTeamList.OrderBy(s => s.CompetitionPoints).ToList();
                 DisplayActiveTeamList(fullTeamList);
 
             }
             else if (cboType.SelectedIndex == 1)
             {
-                fullGamesPlayedList = data.GetGamesPlayed();
-                fullGamesPlayedList = fullGamesPlayedList.OrderBy(c => c.GameName).ToList();
+                fullGamesPlayedList = data.GetAllResults();
+                fullGamesPlayedList = fullGamesPlayedList.OrderBy(c => c.EventName).ToList();
                 DisplayActiveGamesPlayedList(fullGamesPlayedList);
             }
             else
             {
-                fullGamesPlayedList = data.GetGamesPlayed();
-                fullGamesPlayedList = fullGamesPlayedList.OrderByDescending(c => c.GameType.Remove(0, 1)).ToList();
+                fullGamesPlayedList = data.GetAllResults();
+                fullGamesPlayedList = fullGamesPlayedList.OrderByDescending(c => c.Team + c.Opposing.Remove(0, 1)).ToList();
                 DisplayActiveGamesPlayedList(fullGamesPlayedList);
             }
-
             txtSearch.Text = "";
         }
 
-        private void DisplayActiveGamesPlayedList(List<GamesPlayedView> activeList)
+        private void DisplayActiveGamesPlayedList(List<ResultView> activeList)
         {
             displayGamesPlayedList = activeList;
             dgvReport.ItemsSource = displayGamesPlayedList;
@@ -100,7 +98,7 @@ namespace UI
                     {
                         foreach (var item in displayGamesPlayedList)
                         {
-                            writer.WriteLine($"{item.GamesPlayedID},{item.GameName},{item.GameType},{item.TeamName}");
+                            writer.WriteLine($"{item.ResultID},{item.Result},{item.Team},{item.Opposing}, {item.EventName}, {item.GameName}");
                         }
                     }
                 }
@@ -135,12 +133,22 @@ namespace UI
                     DisplayActiveGamesPlayedList(fullGamesPlayedList);
                     return;
                 }
-                filteredGamesPlayedList = fullGamesPlayedList.Where(p => p.GameName.ToUpper().Contains(txtSearch.Text.ToUpper()) ||
-                                                              p.GameType.ToUpper().Contains(txtSearch.Text.ToUpper())).ToList();
+                filteredGamesPlayedList = fullGamesPlayedList.Where(p => p.EventName.ToUpper().Contains(txtSearch.Text.ToUpper()) ||
+                                                              p.EventName.ToUpper().Contains(txtSearch.Text.ToUpper())).ToList();
                 DisplayActiveGamesPlayedList(filteredGamesPlayedList);
             }
 
-
+            if (cboType.SelectedIndex > 0)
+            {
+                if (string.IsNullOrWhiteSpace(txtSearch.Text))
+                {
+                    DisplayActiveGamesPlayedList(fullGamesPlayedList);
+                    return;
+                }
+                filteredGamesPlayedList = fullGamesPlayedList.Where(p => p.Team.ToUpper().Contains(txtSearch.Text.ToUpper()) ||
+                                                              p.Opposing.ToUpper().Contains(txtSearch.Text.ToUpper())).ToList();
+                DisplayActiveGamesPlayedList(filteredGamesPlayedList);
+            }
         }
 
         private void DisplayActiveTeamList(List<Teams> activeList)

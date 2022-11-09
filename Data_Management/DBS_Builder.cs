@@ -264,7 +264,7 @@ namespace Data_Management
                     PrimaryContact = "Email",
                     ContactPhone = "04512185444",
                     ContactEmail = "Sally@tafeqld.edu.au",
-                    CompetitionPoints = 12
+                    CompetitionPoints = 16
                 },
                 new Teams
                 {
@@ -272,7 +272,7 @@ namespace Data_Management
                     PrimaryContact = "Email",
                     ContactPhone = "04512185777",
                     ContactEmail = "Garry@tafeqld.edu.au",
-                    CompetitionPoints = 12
+                    CompetitionPoints = 10
                 }
             };
             //Add each to the database using the relevant DataAccess "Add" method.
@@ -294,7 +294,7 @@ namespace Data_Management
                 {
                     EventName = "BrisbaneGames",
                     EventDate = "12/02/22",
-                    EventLocation = "Brisbane"
+                    EventLocation = "Brisbane",
                 },
                 new Events
                 {
@@ -352,9 +352,13 @@ namespace Data_Management
             //populate list of data model objects with pre-filled data
             List<Results> builds = new List<Results>
             {
-                //new Results(1,1,2,1),
-                //new Results(2,2,2,5),
-                //new Results(3,1,3,6)
+                new Results(1,1,2,1),
+                new Results(2,2,2,5),
+                new Results(3,1,3,6),
+                new Results
+                {
+                    Result = "Win"
+                }
             };
             //Add each to the database using the relevant DataAccess "Add" method.
             foreach (var item in builds)

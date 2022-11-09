@@ -418,17 +418,17 @@ namespace Data_Management
                     //Foreign Keys referencing the same table, this queries relies on using aliases as part of the joins to join each key to the table separately
                     //in order to accurately retrieve all 3 Product Name's. Additinoal aliases are used to tell the fileds apart and to map them to differently named
                     //fields in the model. 
-                    string query = "SELECT Result.ResultsID, Team.TeamName AS Team, OpposingTeam.TeamName AS OpposingTeam, " +
+                    string query = "SELECT Result.ResultsID, team.TeamName AS Team, opposing.TeamName AS Opposing, " +
                                    "Events.EventName, GamesPlayed.GameName, Result.Result " +
-                                   "FROM Result "+
+                                   "FROM Result " +
                                    "INNER JOIN " +
-                                   "Teams Team ON CONVERT(varchar, Result.FKTeamID) = Team.TeamName " +
+                                   "Teams team ON team.TeamID = Result.FKTeamID " +
                                    "INNER JOIN " +
-                                   "Teams OpposingTeam ON CONVERT(varchar, Result.FKTeamID_Opposing) = OpposingTeam.TeamName " +
+                                   "Teams opposing ON opposing.TeamID = Result.FKTeamID_Opposing " +
                                    "INNER JOIN" +
-                                   "Events ON CONVERT(varchar, Result.FKEventsID) = Events.EventName " +
+                                   "Events ON Result.FKEventsID = Events.EventID " +
                                    "INNER JOIN " +
-                                   "GamesPlayed ON CONVERT(varchar, Result.FKGamesPlayedID) = GamesPlayed.GameName ";
+                                   "GamesPlayed ON Result.FKGamesPlayedID = GamesPlayed.GamesPlayedID ";
 
                     //Method to requests the desired record to be removed from the database.
                     return connection.Query<ResultView>(query).ToList();
@@ -458,20 +458,16 @@ namespace Data_Management
                 {
                     try
                     {
-                        string query = "INSERT INTO Result (ResultsID, FKTeamID, FKEventsID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
+                        string query = "INSERT INTO  (ResultsID, FKTeamID, FKEventsID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
                                        "VALUES (@ResultsID, @FKTeamID, @FKEventsID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result)";
 
                         connection.Execute(query, results, transaction);
-
-
 
                         transaction.Commit();
                         return true;
                     }
                     catch (Exception e)
                     {
-
-
                         transaction.Rollback();
                         return false;
                     }
@@ -479,18 +475,18 @@ namespace Data_Management
             }
         }
 
-        public void AddResults(Results results)
+        public void Addresults(Results results)
         {
             try
             {
-                //Using statement structure which uses the provided resource  to perform the provided logic and then automatically
+                //using statement structure which uses the provided resource  to perform the provided logic and then automatically
                 //disposes of the resource once the structure finishes or an error occurs.
                 using (var connection = Helper.CreateSQLConnection("Default"))
                 {
-                    //Query string to be passed to the SQL database to perform the desired database interaction.
-                    string query = "INSERT INTO Result (ResultsID, FKTeamID, FKEventsID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
-                                   "VALUES (@ResultsID, @FKTeamID, @FKEventsID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result)";
-                    //Method to requests the provided data model top be saved to the database.
+                    //query string to be passed to the sql database to perform the desired database interaction.
+                    string query = "insert into Result (ResultsID, FKTeamID, FKEventsID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
+                                   "values (@ResultsID, @FKTeamID, @FKEventsID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result)";
+                    //method to requests the provided data model top be saved to the database.
                     connection.Execute(query, results);
                 }
             }

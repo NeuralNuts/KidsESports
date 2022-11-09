@@ -23,51 +23,36 @@ namespace UI
         public winNewResults()
         {
             InitializeComponent();
-            
             SetupComboBox1();
             SetupComboBox2();
-            SetupTeamComboBox();
+            SetupComboBox4();
+            SetupComboBox3();
         }
         #endregion
 
         #region Functions
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-
             Results result = new Results();
-
             result.Result = txtResults.Text;
             result.FKTeamID = (int)cboTeam.SelectedValue;
             result.FKGamesPlayedID = (int)cboGameName.SelectedValue;
             result.FKEventsID = (int)cboEventName.SelectedValue;
             result.FKTeamID_Opposing = (int)cboOpposingTeam.SelectedValue;
 
-
             if (data.ResultsTransaction(result) == false)
             {
-                MessageBox.Show("Oops, Something went wrong! \n Please Try again");
+                MessageBox.Show("oops, something went wrong! \n please try again");
                 return;
             }
-
             if (AreFieldsSelectedCorrectly() == false)
             {
                 return;
             }
 
+            data.ResultsTransaction(result);
             DialogResult = true;
             Close();
-        }
-
-        private void SetupTeamComboBox()
-        {
-            teams_list = data.GetTeams();
-            cboTeam.ItemsSource = teams_list;
-            cboTeam.DisplayMemberPath = "TeamName";
-            cboTeam.SelectedValuePath = "TeamID";
-
-            cboOpposingTeam.ItemsSource = teams_list;
-            cboOpposingTeam.DisplayMemberPath = "TeamName";
-            cboOpposingTeam.SelectedValuePath = "TeamID";
         }
 
         private void SetupComboBox1()
@@ -77,6 +62,23 @@ namespace UI
             cboGameName.DisplayMemberPath = "GameName";
             cboGameName.SelectedValuePath = "GamesPlayedID";
         }
+
+        private void SetupComboBox3()
+        {
+            teams_list = data.GetTeams();
+            cboTeam.ItemsSource = teams_list;
+            cboTeam.DisplayMemberPath = "TeamName";
+            cboTeam.SelectedValuePath = "TeamID";
+        }
+
+        private void SetupComboBox4()
+        {
+            teams_list = data.GetTeams();
+            cboOpposingTeam.ItemsSource = teams_list;
+            cboOpposingTeam.DisplayMemberPath = "TeamName";
+            cboOpposingTeam.SelectedValuePath = "TeamID";
+        }
+
 
         private void SetupComboBox2()
         {
@@ -110,7 +112,6 @@ namespace UI
             }
             return true;
         }
-
         #endregion
     }
 }
