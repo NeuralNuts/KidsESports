@@ -46,25 +46,25 @@ namespace UI
                 data.WinTransaction(result);
                 RefreshDataTable();
             }
-            else if ((bool)btnOpposing.IsChecked == true)
+            else
+            {
+                data.LossTransaction(result);
+            }
+
+            if ((bool)btnOpposing.IsChecked == true)
             {
                 result.Result = txtResults.Text = "LOSS";
-                data.WinTransaction(result);
+                data.LossTransaction(result);
                 RefreshDataTable();
             }
             if ((bool)btnDraw.IsChecked == true)
             {
                 result.Result = txtResults.Text = "DRAW";
-                data.WinTransaction(result);
+                data.DrawTransaction(result);
                 RefreshDataTable();
             }
             if (AreFieldsSelectedCorrectly() == false)
             {
-                return;
-            }
-            else
-            {
-                MessageBox.Show("oops, something went wrong! \n please try again");
                 return;
             }
 

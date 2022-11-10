@@ -456,11 +456,58 @@ namespace Data_Management
                         string query = "INSERT INTO Result (FKTeamID, FKEventsID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
                                        "VALUES (@FKTeamID, @FKEventsID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result) "; 
                                        
+                        connection.Execute(query, results, transaction);
+
+                        int idO = 0;
+                        int id = 0;
+                        if (results.Result.ToUpper().Equals("WIN"))
+                        {
+                            id = results.FKTeamID;
+                        }
+                        else
+                        {
+                            id = results.FKTeamID;
+                        }
+
+                        query = "UPDATE Teams " +
+                               "SET CompetitionPoints = CompetitionPoints + 2 " +
+                               $"WHERE TeamID = {id} ";
+
+                        connection.Execute(query, results, transaction);
+
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        public bool LossTransaction(Results results)
+        {
+            using (var connection = Helper.CreateSQLConnection("Default"))
+            {
+                //Checks if the connection is currently open, if not, it opens the connection.<= Normally done for us by Dapper 
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        string query = "INSERT INTO Result (FKTeamID, FKEventsID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
+                                       "VALUES (@FKTeamID, @FKEventsID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result) ";
+
 
                         connection.Execute(query, results, transaction);
 
                         int id = 0;
-                        if (results.Result.ToUpper().Equals("WIN"))
+                        if (results.Result.ToUpper().Equals("LOSS"))
                         {
                             id = results.FKTeamID;
                         }
@@ -470,8 +517,53 @@ namespace Data_Management
                         }
 
                         query = "UPDATE Teams " +
-                                "SET CompetitionPoints = CompetitionPoints + 2 " +
-                                $"WHERE TeamID = {id} ";
+                               "SET CompetitionPoints = CompetitionPoints - 2 " +
+                               $"WHERE TeamID = {id} ";
+
+                        connection.Execute(query, results, transaction);
+
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        public bool DrawTransaction(Results results)
+        {
+            using (var connection = Helper.CreateSQLConnection("Default"))
+            {
+                //Checks if the connection is currently open, if not, it opens the connection.<= Normally done for us by Dapper 
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        string query = "INSERT INTO Result (FKTeamID, FKEventsID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
+                                       "VALUES (@FKTeamID, @FKEventsID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result) ";
+
+
+                        connection.Execute(query, results, transaction);
+
+                        
+
+                        query = "UPDATE Teams " +
+                               "SET CompetitionPoints = CompetitionPoints + 1 " +
+                               $"WHERE TeamID = {results.FKTeamID} ";
+
+                        connection.Execute(query, results, transaction);
+
+                        query = "UPDATE Teams " +
+                              "SET CompetitionPoints = CompetitionPoints + 1 " +
+                              $"WHERE TeamID = {results.FKTeamID_Opposing} ";
 
                         connection.Execute(query, results, transaction);
 
