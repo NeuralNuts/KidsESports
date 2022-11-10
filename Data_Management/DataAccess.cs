@@ -26,10 +26,7 @@ namespace Data_Management
                 using (var connection = Helper.CreateSQLConnection("Default"))
                 {
                     //Query string to be passed to the SQL database to perform the desired database interaction.
-                    string query = "SELECT GamesPlayed.GamesPlayedID, GamesPlayed.GameName, Teams.TeamName, " +
-                                    "GamesPlayed.GameType " +
-                                    "FROM Teams INNER JOIN " +
-                                    "GamesPlayed ON Teams.TeamID = GamesPlayed.FKTeamID";
+                    string query = "SELECT * FROM GamesPlayed";
                     //Method to requests the desired data from the database and return the results to the user.
                     return connection.Query<GamesPlayedView>(query).ToList();
                 }
@@ -80,8 +77,8 @@ namespace Data_Management
                 using (var connection = Helper.CreateSQLConnection("Default"))
                 {
                     //Query string to be passed to the SQL database to perform the desired database interaction.
-                    string query = "INSERT INTO GamesPlayed (GameName, FKTeamID, GameType) " +
-                                   "VALUES (@GameName, @FKTeamID, @GameType)";
+                    string query = "INSERT INTO GamesPlayed (GameName, GameType) " +
+                                   "VALUES (@GameName, @GameType)";
                     //Method to requests the provided data model top be saved to the database.
                     connection.Execute(query, games_played);
                 }
@@ -106,7 +103,7 @@ namespace Data_Management
                 {
                     //Query string to be passed to the SQL database to perform the desired database interaction.
                     string query = "UPDATE GamesPlayed " +
-                                   "SET GameName = @GameName, FKTeamID = @FKTeamID, " +
+                                   "SET GameName = @GameName, " +
                                    "GameType = @GameType " +
                                    "WHERE GamesPlayedID = @GamesPlayedID";
                     //Method to requests a record to be updated based upon the provided data model.
@@ -160,10 +157,7 @@ namespace Data_Management
                 using (var connection = Helper.CreateSQLConnection("Default"))
                 {
                     //Query string to be passed to the SQL database to perform the desired database interaction.
-                    string query = "SELECT Events.EventID, Events.EventName, Teams.TeamName, " +
-                                    "Events.EventDate, Events.EventLocation " +
-                                    "FROM Teams INNER JOIN " +
-                                    "Events ON Teams.TeamID = Events.FKTeamID";
+                    string query = "SELECT * FROM Events";
                     //Method to requests the desired data from the database and return the results to the user.
                     return connection.Query<EventView>(query).ToList();
                 }
@@ -188,8 +182,9 @@ namespace Data_Management
                 using (var connection = Helper.CreateSQLConnection("Default"))
                 {
                     //Query string to be passed to the SQL database to perform the desired database interaction.
-                    string query = "INSERT INTO Events (EventName, Eventlocation, EventDate, FKTeamID) " +
-                               "VALUES (@EventName, @EventLocation, @EventDate, @FKTeamID)";
+                    string query = "INSERT INTO Events (EventName, Eventlocation, EventDate) " +
+                               "VALUES (@EventName, @EventLocation, @EventDate)";
+
                     //Method to requests the desired record to be removed from the database.
                     connection.Execute(query, events);
                 }
@@ -231,7 +226,7 @@ namespace Data_Management
                 {
                     //Query string to be passed to the SQL database to perform the desired database interaction.
                     string query = "UPDATE Events " +
-                                   "SET EventName = @EventName, FKTeamID = @FKTeamID, " +
+                                   "SET EventName = @EventName " +
                                    "EventLocation = @EventLocation, EventDate = @EventDate " +
                                    "WHERE EventID = @EventID";
                     //Method to requests a record to be updated based upon the provided data model.
@@ -418,14 +413,14 @@ namespace Data_Management
                     //Foreign Keys referencing the same table, this queries relies on using aliases as part of the joins to join each key to the table separately
                     //in order to accurately retrieve all 3 Product Name's. Additinoal aliases are used to tell the fileds apart and to map them to differently named
                     //fields in the model. 
-                    string query = "SELECT Result.ResultsID, team.TeamName AS Team, opposing.TeamName AS Opposing, " +
+                    string query = "SELECT Result.ResultsID, TeamJoin.TeamName AS Team, OpposingJoin.TeamName AS Opposing, " +
                                    "Events.EventName, GamesPlayed.GameName, Result.Result " +
                                    "FROM Result " +
                                    "INNER JOIN " +
-                                   "Teams team ON team.TeamID = Result.FKTeamID " +
+                                   "Teams AS TeamJoin ON TeamJoin.TeamID = Result.FKTeamID " +
                                    "INNER JOIN " +
-                                   "Teams opposing ON opposing.TeamID = Result.FKTeamID_Opposing " +
-                                   "INNER JOIN" +
+                                   "Teams AS OpposingJoin ON OpposingJoin.TeamID = Result.FKTeamID_Opposing " +
+                                   "INNER JOIN " +
                                    "Events ON Result.FKEventsID = Events.EventID " +
                                    "INNER JOIN " +
                                    "GamesPlayed ON Result.FKGamesPlayedID = GamesPlayed.GamesPlayedID ";
@@ -445,7 +440,7 @@ namespace Data_Management
         /// Adds a new product record to the database based upon the provided data model.
         /// </summary>
         /// <param name="build">The data model holding the details to be stored in the database</param>
-        public bool ResultsTransaction(Results results)
+        public bool WinTransaction(Results results)
         {
             using (var connection = Helper.CreateSQLConnection("Default"))
             {
@@ -458,8 +453,25 @@ namespace Data_Management
                 {
                     try
                     {
-                        string query = "INSERT INTO  (ResultsID, FKTeamID, FKEventsID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
-                                       "VALUES (@ResultsID, @FKTeamID, @FKEventsID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result)";
+                        string query = "INSERT INTO Result (FKTeamID, FKEventsID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
+                                       "VALUES (@FKTeamID, @FKEventsID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result) "; 
+                                       
+
+                        connection.Execute(query, results, transaction);
+
+                        int id = 0;
+                        if (results.Result.ToUpper().Equals("WIN"))
+                        {
+                            id = results.FKTeamID;
+                        }
+                        else
+                        {
+                            id = results.FKTeamID_Opposing;
+                        }
+
+                        query = "UPDATE Teams " +
+                                "SET CompetitionPoints = CompetitionPoints + 2 " +
+                                $"WHERE TeamID = {id} ";
 
                         connection.Execute(query, results, transaction);
 
@@ -472,27 +484,6 @@ namespace Data_Management
                         return false;
                     }
                 }
-            }
-        }
-
-        public void Addresults(Results results)
-        {
-            try
-            {
-                //using statement structure which uses the provided resource  to perform the provided logic and then automatically
-                //disposes of the resource once the structure finishes or an error occurs.
-                using (var connection = Helper.CreateSQLConnection("Default"))
-                {
-                    //query string to be passed to the sql database to perform the desired database interaction.
-                    string query = "insert into Result (ResultsID, FKTeamID, FKEventsID, FKGamesPlayedID, FKTeamID_Opposing, Result) " +
-                                   "values (@ResultsID, @FKTeamID, @FKEventsID, @FKGamesPlayedID, @FKTeamID_Opposing, @Result)";
-                    //method to requests the provided data model top be saved to the database.
-                    connection.Execute(query, results);
-                }
-            }
-            catch (Exception e)
-            {
-
             }
         }
 

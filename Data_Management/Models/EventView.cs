@@ -7,7 +7,6 @@
         public string EventName { get; set; }
         public string EventLocation { get; set; }
         public string EventDate { get; set; }
-        public string TeamName { get; set; }
         #endregion
     }
 }

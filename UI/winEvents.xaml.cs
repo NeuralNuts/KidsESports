@@ -23,18 +23,10 @@ namespace UI
             InitializeComponent();
 
             UpdateDataGrid();
-            SetupComboBox();
         }
         #endregion
 
         #region Functions
-        private void SetupComboBox()
-        {
-            teams_list = data.GetTeams();
-            cboTeamName.ItemsSource = teams_list;
-            cboTeamName.DisplayMemberPath = "TeamName";
-            cboTeamName.SelectedValuePath = "TeamID";
-        }
         private void UpdateDataGrid()
         {
             event_list = data.GetEvents();
@@ -53,7 +45,6 @@ namespace UI
             events = data.GetEventsByID(id);
             txteventID.Text = events.EventID.ToString();
             txtEventName.Text = events.EventName;
-            cboTeamName.SelectedValue = events.FKTeamID;
             txtEventLocation.Text = events.EventLocation;
             txtEventDate.Text = events.EventDate;
             saveType = SaveMode.UpdateSave; 
@@ -68,7 +59,6 @@ namespace UI
             }
 
             events.EventName = txtEventName.Text;
-            events.FKTeamID = (int)cboTeamName.SelectedValue;
             events.EventLocation = txtEventLocation.Text;
             events.EventDate = txtEventDate.Text;
 
@@ -95,17 +85,12 @@ namespace UI
             txtEventName.Text = "";
             txtEventLocation.Text = "";
             txtEventDate.Text = "";
-            cboTeamName.SelectedIndex = -1;
             saveType = SaveMode.NewSave;
         }
 
         private bool FieldsFilledCorrectly()
         {
             if (String.IsNullOrWhiteSpace(txtEventName.Text))
-            {
-                return false;
-            }
-            if (cboTeamName.SelectedIndex < 0)
             {
                 return false;
             }

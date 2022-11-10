@@ -21,7 +21,6 @@ namespace UI
         public winGamesPlayed()
         {
             InitializeComponent();
-            SetupComboBox();
             UpdateDataGrid();
         }
         #endregion
@@ -38,7 +37,6 @@ namespace UI
             games_played = data.GetGamesPlayedById(id);
             txtGamesPlayedID.Text = games_played.GamesPlayedID.ToString();
             txtGameName.Text = games_played.GameName;
-            cboTeamName.SelectedValue = games_played.FKTeamID;
             txtGameType.Text = games_played.GameType;
             saveType = SaveMode.UpdateSave;
         }
@@ -80,14 +78,6 @@ namespace UI
             dgvGamesPlayed.Items.Refresh();
         }
 
-        private void SetupComboBox()
-        {
-            teams_list = data.GetTeams();
-            cboTeamName.ItemsSource = teams_list;
-            cboTeamName.DisplayMemberPath = "TeamName";
-            cboTeamName.SelectedValuePath = "TeamID";
-        }
-
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             if (FieldsFilledCorrectly() == false)
@@ -97,7 +87,6 @@ namespace UI
             }
 
             games_played.GameName = txtGameName.Text;
-            games_played.FKTeamID = (int)cboTeamName.SelectedValue;
             games_played.GameType = txtGameType.Text;
 
             if (saveType == SaveMode.NewSave)
@@ -122,7 +111,6 @@ namespace UI
             txtGamesPlayedID.Text = "";
             txtGameName.Text = "";
             txtGameType.Text = "";
-            cboTeamName.SelectedIndex = -1;
 
             saveType = SaveMode.NewSave;
         }
@@ -130,10 +118,6 @@ namespace UI
         private bool FieldsFilledCorrectly()
         {
             if (String.IsNullOrWhiteSpace(txtGameName.Text))
-            {
-                return false;
-            }
-            if (cboTeamName.SelectedIndex < 0)
             {
                 return false;
             }
@@ -145,5 +129,6 @@ namespace UI
             return true;
         }
         #endregion
+
     }
 }

@@ -6,7 +6,6 @@
         public int EventID { get; set; }
         public string EventName { get; set; }
         public string EventLocation { get; set; }
-        public int FKTeamID { get; set; }
         public string EventDate { get; set; }
         #endregion
     }

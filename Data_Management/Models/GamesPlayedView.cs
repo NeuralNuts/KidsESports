@@ -6,7 +6,6 @@
         public int GamesPlayedID { get; set; }
         public string GameName { get; set; }
         public string GameType { get; set; }
-        public string TeamName { get; set; }
         #endregion
     }
 }

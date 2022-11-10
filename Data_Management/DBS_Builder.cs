@@ -165,9 +165,7 @@ namespace Data_Management
             //Outlines structure of table
             string tableStructure = "GamesPlayedID BIGINT IDENTITY(1,1) PRIMARY KEY, " +
                                     "GameName VARCHAR(50) NOT NULL, " +
-                                    "FKTeamID BIGINT NOT NULL, " +
                                     "GameType VARCHAR(50) NOT NULL " +
-                                    "FOREIGN KEY (FKTeamID) REFERENCES Teams(TeamID) " +
                                     "ON UPDATE Cascade ON DELETE Cascade ";
             //Pases name and strucutre to creation method.
             CreateTable(tableName, tableStructure);
@@ -197,10 +195,8 @@ namespace Data_Management
             //
             string tableStructure = "EventID BIGINT IDENTITY(1,1) PRIMARY KEY, " +
                                     "EventName VARCHAR(50) NOT NULL, " +
-                                    "FKTeamID BIGINT NOT NULL, " +
                                     "EventLocation VARCHAR(50) NOT NULL, " +
                                     "EventDate VARCHAR(50) NOT NULL " + 
-                                    "FOREIGN KEY (FKTeamID) REFERENCES Teams(TeamID) " +
                                     "ON UPDATE Cascade ON DELETE Cascade ";
             //Pases name and strucutre to creation method.
             CreateTable(tableName, tableStructure);
@@ -363,7 +359,7 @@ namespace Data_Management
             //Add each to the database using the relevant DataAccess "Add" method.
             foreach (var item in builds)
             {
-                ResultsTransaction(item);
+                WinTransaction(item);
             }
         }
     }

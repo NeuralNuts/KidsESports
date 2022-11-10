@@ -45,9 +45,6 @@
             <Label Foreground="White">Event Name</Label>
             <TextBox x:Name="txtEventName"/>
 
-            <Label Foreground="White">Team Name:</Label>
-            <ComboBox x:Name="cboTeamName"/>
-
             <Label Foreground="White">Event Location</Label>
             <TextBox x:Name="txtEventLocation"/>
 

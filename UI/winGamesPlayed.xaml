@@ -46,9 +46,6 @@
             <Label Foreground="White">GameName</Label>
             <TextBox x:Name="txtGameName"/>
 
-            <Label Foreground="White">Team Name:</Label>
-            <ComboBox x:Name="cboTeamName"/>
-
             <Label Foreground="White">Game Type</Label>
             <TextBox x:Name="txtGameType"/>
 

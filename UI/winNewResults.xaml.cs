@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using UI;
 #endregion
 
 namespace UI
@@ -34,25 +35,50 @@ namespace UI
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             Results result = new Results();
-            result.Result = txtResults.Text;
             result.FKTeamID = (int)cboTeam.SelectedValue;
             result.FKGamesPlayedID = (int)cboGameName.SelectedValue;
             result.FKEventsID = (int)cboEventName.SelectedValue;
             result.FKTeamID_Opposing = (int)cboOpposingTeam.SelectedValue;
 
-            if (data.ResultsTransaction(result) == false)
+            if ((bool)btnTeam.IsChecked == true)
             {
-                MessageBox.Show("oops, something went wrong! \n please try again");
-                return;
+                result.Result = txtResults.Text = "WIN";
+                data.WinTransaction(result);
+                RefreshDataTable();
+            }
+            else if ((bool)btnOpposing.IsChecked == true)
+            {
+                result.Result = txtResults.Text = "LOSS";
+                data.WinTransaction(result);
+                RefreshDataTable();
+            }
+            if ((bool)btnDraw.IsChecked == true)
+            {
+                result.Result = txtResults.Text = "DRAW";
+                data.WinTransaction(result);
+                RefreshDataTable();
             }
             if (AreFieldsSelectedCorrectly() == false)
             {
                 return;
             }
+            else
+            {
+                MessageBox.Show("oops, something went wrong! \n please try again");
+                return;
+            }
 
-            data.ResultsTransaction(result);
             DialogResult = true;
             Close();
+        }
+
+        private void RefreshDataTable()
+        {
+            winResults win_results = new winResults();
+
+            result_list = data.GetAllResults();
+            win_results.dgvResults.ItemsSource = result_list;
+            win_results.dgvResults.Items.Refresh();
         }
 
         private void SetupComboBox1()
@@ -73,8 +99,8 @@ namespace UI
 
         private void SetupComboBox4()
         {
-            teams_list = data.GetTeams();
-            cboOpposingTeam.ItemsSource = teams_list;
+            opposing_teams_list = data.GetTeams();
+            cboOpposingTeam.ItemsSource = opposing_teams_list;
             cboOpposingTeam.DisplayMemberPath = "TeamName";
             cboOpposingTeam.SelectedValuePath = "TeamID";
         }
@@ -113,5 +139,10 @@ namespace UI
             return true;
         }
         #endregion
+
+        private void btnTeam_Checked(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }
