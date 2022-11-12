@@ -3,7 +3,7 @@
     public class ResultView
     {
         #region Data Structure
-        public int ResultID { get; set; }
+        public int ResultsID { get; set; }
         public string Team { get; set; }
         public string Opposing { get; set; }
         public string GameName { get; set; }

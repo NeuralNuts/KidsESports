@@ -10,11 +10,13 @@ namespace Data_Management
         #region Functions
         private static string GetConnectionString(string name)
         {
+            //Gets the connection of the database//
             return ConfigurationManager.ConnectionStrings[name].ConnectionString;
         }
      
         public static SqlConnection CreateSQLConnection(string name)
         {
+            //Builds the SQL connection//
             return new SqlConnection(GetConnectionString(name));
         }
         #endregion

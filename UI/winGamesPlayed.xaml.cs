@@ -59,7 +59,7 @@ namespace UI
             if (result == MessageBoxResult.Yes)
             {
                 int id = games_played_list[dgvGamesPlayed.SelectedIndex].GamesPlayedID;
-                data.DeleteEvents(id);
+                data.DeleteGamesPlayed(id);
                 ClearDataEntryFields();
                 UpdateDataGrid();
                 MessageBox.Show("Record Deleted.");
@@ -129,6 +129,5 @@ namespace UI
             return true;
         }
         #endregion
-
     }
 }

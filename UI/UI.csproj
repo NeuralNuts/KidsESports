@@ -112,9 +112,6 @@
     <Compile Include="winTeams.xaml.cs">
       <DependentUpon>winTeams.xaml</DependentUpon>
     </Compile>
-    <Compile Include="winNewResults.xaml.cs">
-      <DependentUpon>winNewResults.xaml</DependentUpon>
-    </Compile>
     <Compile Include="winEvents.xaml.cs">
       <DependentUpon>winEvents.xaml</DependentUpon>
     </Compile>
@@ -142,10 +139,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winTeams.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="winNewResults.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

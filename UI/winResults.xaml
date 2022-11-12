@@ -7,11 +7,12 @@
         mc:Ignorable="d"
         Title="winBuildSelection" 
         Height="450" 
-        Width="800"
+        Width="1300"
         Background="#FF1F1F1F">
+
     <!--UI for results-->
     <!--#region UI-->
-    <Grid>
+    <Grid Margin="0,0,2,0">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition 
@@ -26,30 +27,78 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.ColumnSpan="3" 
+        <Label Grid.ColumnSpan="2" 
                HorizontalContentAlignment="Center" 
                FontSize="40" 
                Background="#FFCD4949" 
                BorderBrush="#FFA84242"
                Foreground="#FFDADADA"
-               BorderThickness="4" Width="792">RESULTS</Label>
+               BorderThickness="4" Width="792" Margin="0,0,285,0">RESULTS</Label>
 
         <DataGrid x:Name="dgvResults" 
                   Grid.Row="1" 
-                  Grid.ColumnSpan="3"
-                  Margin="25,0"/>
+                  Grid.ColumnSpan="2"
+                  Margin="0,0,285,0" SelectionChanged="dgvResults_SelectionChanged" />
 
         <Button x:Name="btnNew"
                 Grid.Row="2" 
-                Margin="10,15" 
+                Margin="0,15,20,15" 
                 RenderTransformOrigin="0.5,0.505"
                 Click="btnNew_Click">NEW</Button>
+
+
+        <Button x:Name="btnSave"
+                Grid.Row="2" 
+                Margin="382,15,283,15" 
+                RenderTransformOrigin="0.5,0.505"
+                Click="btnSave_Click" Grid.Column="1">SAVE</Button>
 
         <Button x:Name="btnClose" 
                 Grid.Row="2" 
                 Grid.Column="2" 
-                Margin="10,15" 
+                Margin="0,15,21,15" 
                 Click="btnClose_Click">Close</Button>
+
+        <Grid Grid.Column="1" Margin="633,67,12,142" Grid.Row="1">
+            <StackPanel Margin="216,58,-216,-143">
+                <Label Foreground="White" Margin="76,0,-0.4,0">Event Name:</Label>
+                <ComboBox x:Name="cboEventName" Margin="76,0,9.6,0"/>
+
+                <Label Foreground="White" Margin="76,0,-0.4,0">Game Name:</Label>
+                <ComboBox x:Name="cboGameName" Margin="76,0,9.6,0"/>
+
+                <Label Foreground="White" Margin="76,0,-0.4,0">Results:</Label>
+                <TextBox x:Name="txtResults" Margin="76,0,9.6,0" Height="22"/>
+
+            </StackPanel>
+        </Grid>
+
+        <Grid Margin="835,26,25,179" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="67*"/>
+                <RowDefinition Height="353*"/>
+            </Grid.RowDefinitions>
+            <RadioButton x:Name="btnTeam" Foreground="White" Margin="10,10,121,84" Content="WIN" Grid.Row="1"/>
+            <RadioButton x:Name="btnDraw" Foreground="White" Margin="10,50,137,42" Content='DRAW' Grid.Row="1"/>
+            <RadioButton x:Name="btnOpposing" Foreground="White" Margin="10,97,121,0" Content="WIN" Grid.Row="1"/>
+            <ComboBox x:Name="cboTeam" Margin="97,9,0,84" Grid.Row="1"/>
+            <Label Foreground="White" Margin="97,-1,2,111" RenderTransformOrigin="0.5,0.5" Content="Team:" Grid.RowSpan="2">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleX="1.66"/>
+                        <RotateTransform/>
+                        <TranslateTransform X="0.371"/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+
+            <ComboBox x:Name="cboOpposingTeam" Margin="97,97,0,0" Grid.Row="1"/>
+            <Label Foreground="White" Margin="97,69,0,23" Content="Opposing Team:" Grid.Row="1"/>
+        </Grid>
+
+        <Label Content="Result ID" Foreground="White" Margin="614,25,30,20" Grid.Column="1"/>
+        <TextBox IsReadOnly="True" Margin="614,55,107,266" Grid.Column="1" Grid.RowSpan="2" x:Name="txtResultID" />
     </Grid>
     <!--#endregion-->
 </Window>

@@ -17,7 +17,7 @@ namespace UI
     {
         #region Var
         DataAccess data = new DataAccess();
-        List<string> reportOptions = new List<string> { "Teams By Points", "Results By Event", "Results By Game Team" };
+        List<string> reportOptions = new List<string> { "Teams By Points", "Results By Event", "Results By Team" };
         List<Teams> fullTeamList;
         List<Teams> filteredTeamList = new List<Teams>();
         List<Teams> TeamDisplayList;
@@ -98,7 +98,7 @@ namespace UI
                     {
                         foreach (var item in displayGamesPlayedList)
                         {
-                            writer.WriteLine($"{item.ResultID},{item.Result},{item.Team},{item.Opposing}, {item.EventName}, {item.GameName}");
+                            writer.WriteLine($"{item.ResultsID},{item.Result},{item.Team},{item.Opposing}, {item.EventName}, {item.GameName}");
                         }
                     }
                 }
@@ -133,8 +133,8 @@ namespace UI
                     DisplayActiveGamesPlayedList(fullGamesPlayedList);
                     return;
                 }
-                filteredGamesPlayedList = fullGamesPlayedList.Where(p => p.EventName.ToUpper().Contains(txtSearch.Text.ToUpper()) ||
-                                                              p.EventName.ToUpper().Contains(txtSearch.Text.ToUpper())).ToList();
+                filteredGamesPlayedList = fullGamesPlayedList.Where(p => p.Team.ToUpper().Contains(txtSearch.Text.ToUpper()) ||
+                                                              p.Opposing.ToUpper().Contains(txtSearch.Text.ToUpper())).ToList();
                 DisplayActiveGamesPlayedList(filteredGamesPlayedList);
             }
 
@@ -145,7 +145,7 @@ namespace UI
                     DisplayActiveGamesPlayedList(fullGamesPlayedList);
                     return;
                 }
-                filteredGamesPlayedList = fullGamesPlayedList.Where(p => p.Team.ToUpper().Contains(txtSearch.Text.ToUpper()) ||
+                filteredGamesPlayedList = fullGamesPlayedList.Where(p => p.EventName.ToUpper().Contains(txtSearch.Text.ToUpper()) ||
                                                               p.Opposing.ToUpper().Contains(txtSearch.Text.ToUpper())).ToList();
                 DisplayActiveGamesPlayedList(filteredGamesPlayedList);
             }

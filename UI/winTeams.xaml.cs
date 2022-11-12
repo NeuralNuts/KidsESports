@@ -63,7 +63,7 @@ namespace UI
             txtContactEmail.Text = teams.ContactEmail;
             txtContactPhone.Text = teams.ContactPhone;
             txtCompetitionPoints.Text = teams.CompetitionPoints.ToString();
-            //Sets the save type to an Update save type for when the next save is pressed.
+           
             saveType = SaveMode.UpdateSave; 
         }
 
